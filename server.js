@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 // Handle call from IMAP to trigger a new incoming Email
 app.post('/new-email', (req, res) => {
     console.log('from app.post....');
-    console.log(typeof (req.body));
+    console.log(req.body);
+
     // parstToSMS(req.body);
     res.sendStatus(200);
 });
