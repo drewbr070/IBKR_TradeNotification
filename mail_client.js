@@ -2,8 +2,7 @@ require('dotenv').config({ path: './config.env' });
 
 const request = require('request')
 const notifier = require('mail-notifier');
-const TradeNotice = require('./TradeNotice');
-const tradeNotice = new TradeNotice();
+const redisPost = require('./TradeNotice');
 
 const imap = {
     user: process.env.IMAP_USER,
@@ -28,7 +27,7 @@ notifier(imap).on('mail', mail => {
     console.info("New Mail Recieved");
     if (mail.from[0].address === process.env.AUTH_SENDER &&
         mail.subject.endsWith(process.env.AUTH_ACCOUNT)) {
-        tradeNotice(mail).prnt()
+        redisPost(mail);
     }
 
 }).start()
