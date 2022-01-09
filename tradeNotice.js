@@ -1,12 +1,17 @@
+const Redis = require("ioredis");
+const redis = new Redis();
+const channel = 'drewtradingbro-transact';
 
 const shareKeys = ["action", "position", "tckr", "void", "price", "account"];
 const optionKeys = ["action", "position", "tckr", "expiry", "position", "call_put", "exchange", "void", "price", "account"];
 
+// post transaction to redis
 function redisPost(mail) {
     const json = contractType(mail);
-    console.log(json);
+    redis.publish(channel, json);
+    console.log("Published %s to %s", json, channel);
 };
-
+// parse the mail subject to evaluate which contract dictionary to apply
 function contractType(mail) {
     const v = mail.subject.split(' ');
     if (v[5] === 'PUT' || v[5] === 'CALL') {
@@ -16,7 +21,7 @@ function contractType(mail) {
         return jsonPayload("Share", shareKeys, v);
     }
 }
-
+// prepare a json payload with the contact information
 function jsonPayload(type, keys, v) {
     var obj = {};
     var obj = keys.map(function (k) {
@@ -31,10 +36,5 @@ function jsonPayload(type, keys, v) {
 }
 
 module.exports = redisPost;
-
-
-
-
-
 
 
