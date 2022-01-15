@@ -2,8 +2,8 @@ const Redis = require("ioredis");
 const redis = new Redis();
 const channel = 'drewtradingbro-transact';
 
-const shareKeys = ["action", "position", "tckr", "void", "price", "account"];
-const optionKeys = ["action", "position", "tckr", "expiry", "position", "call_put", "exchange", "void", "price", "account"];
+const shareKeys = ["action", "position", "ticker", "void", "price", "account"];
+const optionKeys = ["action", "position", "ticker", "expiry", "strike", "right", "exchange", "void", "price", "account"];
 
 // post transaction to redis
 function redisPost(mail) {
@@ -18,7 +18,7 @@ function contractType(mail) {
         return jsonPayload("Option", optionKeys, v);
     }
     else {
-        return jsonPayload("Share", shareKeys, v);
+        return jsonPayload("Stock", shareKeys, v);
     }
 }
 // prepare a json payload with the contact information
